@@ -10,7 +10,7 @@ import "./PlayingCardList.css";
 const BASE_URL = "https://deckofcardsapi.com/api/deck/new/draw/"
 
 function CardTable() {
-  const [cards, addCard] = useAxios('cards', BASE_URL);
+  const [cards, addCard] = useAxios(BASE_URL);
   // const [cards, setCards] = useState();
 
   // const addCard = async () => {
