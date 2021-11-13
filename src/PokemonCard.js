@@ -1,10 +1,10 @@
-import useFlip from './hooks'
+import { useFlip } from './hooks'
 import "./PokemonCard.css";
 
 /* Renders a single pokemon card. */
 function PokemonCard({ front, back, name, stats }) {
   const [isFacingUp, flipCard] = useFlip()
-
+  console.log(stats)
   return (
     <div onClick={flipCard} className="PokemonCard Card">
       {isFacingUp ? (
@@ -31,3 +31,4 @@ function PokemonCard({ front, back, name, stats }) {
 }
 
 export default PokemonCard;
+

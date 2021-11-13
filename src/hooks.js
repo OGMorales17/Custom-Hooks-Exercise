@@ -1,40 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import uuid from "uuid";
 
 
 const useFlip = (initialState = true) => {
     const [flip, setFlip] = useState(initialState)
+
     const toggleFlip = () => {
         setFlip(flip => !flip)
     }
     return [flip, toggleFlip]
 }
 
-const useAxios = (url) => {
-    const [data, setData] = useState([]);
-    const addData = async () => {
-        const response = await axios.get(url);
-        setData(data => [...data, { ...response.data, id: uuid() }]);
+const useAxios = (keyInLS, baseUrl) => {
+    const [resp, setResp] = useLocalStorage(keyInLS);
+
+    const addRespData = async (formatter = data => data, ept = "") => {
+        const response = await axios.get(`${baseUrl}${ept}`);
+        setResp(data => [...data, formatter(response.data)]);
     };
-    return [data, addData]
+
+    const clearResp = () => setResp([]);
+
+    return [resp, addRespData, clearResp];
 }
 
-// function useAxios(keyInLS, baseUrl) {
-//     const [responses, setResponses] = useLocalStorage(keyInLS);
+const useLocalStorage = (key, initialValue = []) => {
+    if (localStorage.getItem(key)) {
+        initialValue = JSON.parse(localStorage.getItem(key));
+    }
+    const [value, setValue] = useState(initialValue);
 
-//     const addResponseData = async (formatter = data => data, restOfUrl = "") => {
-//         const response = await axios.get(`${baseUrl}${restOfUrl}`);
-//         setResponses(data => [...data, formatter(response.data)]);
-//     };
+    useEffect(() => {
+        localStorage.setItem(key, JSON.stringify(value));
+    }, [value, key]);
 
-//     const clearResponses = () => setResponses([]);
-
-//     return [responses, addResponseData, clearResponses];
-// }
+    return [value, setValue];
+}
 
 
 export default useFlip;
-export { useAxios };
+export { useFlip, useAxios, useLocalStorage };
 
 

@@ -1,4 +1,3 @@
-import React from "react";
 import PlayingCardList from "./PlayingCardList";
 import PokeDex from "./PokeDex";
 import "./CardTable.css";
